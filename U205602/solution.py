@@ -1,49 +1,33 @@
-from copy import deepcopy
-from functools import cache
-
-x, y = map(int, input().split())
+size = 8
 
 
-full = [()]
-
+def neighbor(x, y):
+    return [(x-1, y-2), (x+1, y-2), (x-1, y+2), (x+1, y+2), (x-2, y-1), (x+2, y-1), (x-2, y+1), (x+2, y+1)]
 
 def valid(x, y):
-    return 0 <= x < 8 and 0 <= y < 8
+    return 0 <= x < size and 0 <= y < size
 
+def count(visited, x, y):
+    return sum((xx, yy) not in visited and valid(xx, yy) for xx, yy in neighbor(x, y))
 
-def count(world, x, y):
-    return sum(
-        valid(x-1, y-2) and (x-1, y-1) not in world,
-        valid(x+1, y-2) and world[x+1][y-2],
-        valid(x-1, y+2) and world[x-1][y+2],
-        valid(x+1, y+2) and world[x+1][y+2],
-        valid(x-2, y-1) and world[x-2][y-1],
-        valid(x+2, y-1) and world[x+2][y-1],
-        valid(x-2, y+1) and world[x-2][y+1],
-        valid(x+2, y+1) and world[x+2][y+1],
-    )
+def find_bests(visited, x, y):
+    return sorted(((count(visited, xx, yy), xx, yy) for xx, yy in neighbor(x, y) if (xx, yy) not in visited and valid(xx, yy)))
 
+def travel(visited, x, y):
+    if len(visited) == size * size:
+        return [(x, y)]
 
-def find_bests(world, x, y):
-    ans = []
-    if valid(x-1, y-2):
-        ans.append((count(world, x-1, y-2), x-1, y-2))
-    if valid(x+1, y-2):
-        ans.append((count(world, x+1, y-2), x+1, y-2))
-    if valid(x-1, y+2):
-        ans.append((count(world, x-1, y+2), x-1, y+2))
-    if valid(x+1, y+2):
-        ans.append((count(world, x+1, y+2), x+1, y+2))
-    if valid(x-2, y-1):
-        ans.append((count(world, x-2, y-1), x-2, y-1))
-    if valid(x+2, y-1):
-        ans.append((count(world, x+2, y-1), x+2, y-1))
-    if valid(x-2, y+1):
-        ans.append((count(world, x-2, y+1), x-2, y+1))
-    if valid(x+2, y+1):
-        ans.append((count(world, x+2, y+1), x+2, y+1))
-    return sorted(ans, reverse=True)
+    for _, xx, yy in find_bests(visited, x, y):
+        result = travel(visited | {(xx, yy)}, xx, yy)
+        if result:
+            return [(x, y)] + result
 
+if __name__ == '__main__':
+    x, y = map(int, input().split())
+    world = [[0] * size for _ in range(size)]
+    step = 0
+    for i, j in travel({(x, y)}, x, y):
+        step += 1
+        world[i][j] = step
 
-def travel(world, now):
-    pass
+    print(*(' '.join(map(str, row)) for row in world), sep='\n')
