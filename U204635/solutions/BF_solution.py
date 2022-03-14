@@ -2,15 +2,15 @@ from itertools import permutations
 
 
 def solve(n, time_map):
-    ans = 0b1 << 32
+    ans = 0b1 << 31
 
-    for case in permutations(range(1, n), n - 1):
+    for path in permutations(range(1, n), n - 1):
         this = i = 0
-        for j in case:
-            tmp = time_map[i][j]
-            if tmp == -1:
+        for j in path:
+            time = time_map[i][j]
+            if time == -1:
                 break
-            this += tmp
+            this += time
             i = j
             if this >= ans:
                 break

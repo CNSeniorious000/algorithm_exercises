@@ -2,17 +2,17 @@ def solve(n, time_map):
     past = {(0b1, 0): 0}  # (path, last) -> time
     for _ in range(n - 1):
         this = {}
-        for case, time in past.items():
-            path, last = case
+        for key, spent in past.items():
+            visited, last = key
 
             for i in range(1, n):
-                if not path & 0b1 << i:
-                    tmp = time_map[last][i]
-                    if tmp == -1:
+                if not visited & 0b1 << i:
+                    time = time_map[last][i]
+                    if time == -1:
                         continue
 
-                    val = time + tmp
-                    key = path | 0b1 << i, i
+                    val = spent + time
+                    key = visited | 0b1 << i, i
                     if key not in this or this[key] > val:
                         this[key] = val
         past = this

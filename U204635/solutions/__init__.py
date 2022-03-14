@@ -1,8 +1,28 @@
+from alive_progress import alive_it as track
+from itertools import combinations
 import random
 
+_MAX = 0b1 << 31
 
-def generate_testcase(n):
-    raise NotImplementedError
+
+def generate_testcase(n, ratio=1):
+    MAX = _MAX // n
+    world = [[-1] * n for _ in range(n)]
+
+    for i in range(n):
+        world[i][i] = 0
+
+    for i, j in track(combinations(range(n), 2), title="seeding", total=n * (n - 1) // 2):
+        world[i][j] = world[j][i] = random.randrange(MAX)
+
+    for _ in track(range(int(n * n * (1 - ratio))), title="dropping"):
+        while True:
+            i, j = random.randrange(n), random.randrange(n)
+            if i != j and sum(world[i]) > 3 - n and sum(world[j]) > 3 - n:
+                world[i][j] = world[j][i] = -1
+                break
+
+    return world
 
 
 example_testcase = (5, [

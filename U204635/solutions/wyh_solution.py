@@ -1,4 +1,4 @@
-"""solution from @w1742910621"""
+__author__ = "@w1742910621"
 
 
 def solve(n, time_map):
