@@ -1,19 +1,39 @@
+from re import I
 from solutions.wyh_solution import solve as solve_0
 from solutions.BF_solution import solve as solve_1
 from solutions.DP_solution import solve as solve_2
+from time import perf_counter_ns as time
 from solutions import generate_testcase
+from contextlib import contextmanager
 from copy import deepcopy
+from numpy import array
+from numba import jit
 from rich import *
 
+
+@contextmanager
+def timer(func):
+    t = time()
+    yield
+    print(func.__name__, time() - t)
+
+
+solve_2 = jit(nopython=False, cache=True)(solve_2)
+
 def main():
-    n, ratio = 10, 0.5
+    n, ratio = 15, 0.98
     case = generate_testcase(n, ratio)
-    print(case)
-    print(solve_0(n, deepcopy(case)))
-    print(solve_1(n, deepcopy(case)))
-    print(solve_2(n, deepcopy(case)))
-    ans = [solve_0(n, deepcopy(case)), solve_1(n, deepcopy(case)), solve_2(n, deepcopy(case))]
-    assert ans[0] == ans[1] == ans[2], case
+
+    with timer(solve_2):
+        ans_2 = solve_2(n, array(case))
+    
+    with timer(solve_0):
+        ans_0 = solve_0(n, deepcopy(case))
+
+    with timer(solve_1):
+        ans_1 = solve_1(n, deepcopy(case))
+
+    assert ans_0 == ans_1 == ans_2, case
 
 
 if __name__ == '__main__':
