@@ -1,14 +1,11 @@
-from re import I
 from solutions.wyh_solution import solve as solve_0
 from solutions.BF_solution import solve as solve_1
 from solutions.DP_solution import solve as solve_2
-from time import perf_counter_ns as time
+from time import perf_counter as time
 from solutions import generate_testcase
 from contextlib import contextmanager
-from copy import deepcopy
-from numpy import array
-from numba import jit
-from rich import *
+from contextlib import suppress
+from rich import print
 
 
 @contextmanager
@@ -18,23 +15,46 @@ def timer(func):
     print(func.__name__, time() - t)
 
 
-solve_2 = jit(nopython=False, cache=True)(solve_2)
+def run(func, *args, n=10_000):
+    with timer(func):
+        t = time()
+        for _ in range(n):
+            func(*args)
+        return time() - t
 
-def main():
-    n, ratio = 15, 0.98
-    case = generate_testcase(n, ratio)
 
-    with timer(solve_2):
-        ans_2 = solve_2(n, array(case))
-    
-    with timer(solve_0):
-        ans_0 = solve_0(n, deepcopy(case))
+def do_test(size, ratio, m=100, n=100):
+    cases = [
+        generate_testcase(size, ratio)
+        for _ in range(m)
+    ]
 
-    with timer(solve_1):
-        ans_1 = solve_1(n, deepcopy(case))
+    return [
+        sum(run(func, size, case, n=n) for case in cases)/(m*n)
+        for func in (solve_0, solve_1, solve_2)
+    ]
 
-    assert ans_0 == ans_1 == ans_2, case
+
+def plot():
+    from matplotlib import pyplot as plt
+    ratio = 0.9
+    x, y_0, y_1, y_2 = [], [], [], []
+    with suppress(KeyboardInterrupt):
+        for size in range(4, 12):
+            print(f"{size = }, {ratio = }")
+            x.append(size)
+            a, b, c = do_test(size, ratio)
+            y_0.append(a)
+            y_1.append(b)
+            y_2.append(c)
+
+    limit = min(len(x), len(y_0), len(y_1), len(y_2))
+
+    plt.plot(x[:limit], y_0[:limit])
+    plt.plot(x[:limit], y_1[:limit])
+    plt.plot(x[:limit], y_2[:limit])
+    plt.show()
 
 
 if __name__ == '__main__':
-    main()
+    plot()

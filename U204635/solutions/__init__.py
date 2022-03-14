@@ -9,22 +9,24 @@ def generate_testcase(n, ratio=1):
     MAX = _MAX // n
     time_map = [[-1] * n for _ in range(n)]
 
-    for i in range(n):
-        time_map[i][i] = 0
+    track = lambda *args, **kwargs: args[0]
 
-    for i, j in track(combinations(range(n), 2), title="seeding", total=n * (n - 1) // 2):
-        time_map[i][j] = time_map[j][i] = random.randrange(MAX)
+    while True:
+        for i in range(n):
+            time_map[i][i] = 0
 
-    for _ in track(range(int(n * n * (1 - ratio))), title="dropping"):
-        while True:
-            i, j = random.randrange(n), random.randrange(n)
-            time_map[i][j] = time_map[j][i] = -1
-            if check_connect(time_map):
-                break
-            else:
-                time_map[i][j] = time_map[j][i] = random.randrange(MAX)
+        for i, j in track(combinations(range(n), 2), title="seeding", total=n * (n - 1) // 2):
+            time_map[i][j] = time_map[j][i] = random.randrange(MAX)
 
-    return time_map
+        for _ in track(range(int(n * n * (1 - ratio))), title="dropping"):
+            while True:
+                i, j = random.randrange(n), random.randrange(n)
+                if i != j and time_map[i][j] != -1:
+                    time_map[i][j] = -1
+                    break
+        
+        if check_connect(time_map):
+            return time_map
 
 
 def check_connect(time_map):
@@ -37,9 +39,8 @@ def check_connect(time_map):
             else:
                 break
         else:
-            print(path)
+            # print(path)
             return True
-    print(False)
     return False
 
 
