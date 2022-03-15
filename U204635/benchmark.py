@@ -104,10 +104,9 @@ def plot_2():
 def run_and_save_result():
     from alive_progress import alive_it as track
     import pickle
-    with suppress(KeyboardInterrupt):
-        x, y_0, y_1, y_2, y_3 = zip(
-            *((size, *do_test_1(size, 1, 20, 20)) for size in track(range(3, 10)))
-        )
+    x, y_0, y_1, y_2, y_3 = zip(
+        *((size, *do_test_1(size, 1, 10, 5)) for size in track(range(3, 13)))
+    )
     limit = min(map(len, (x, y_0, y_1, y_2, y_3)))
     pickle.dump((
         (x[:limit], y_0[:limit], y_1[:limit], y_2[:limit], y_3[:limit])
