@@ -1,3 +1,6 @@
+__author__ = "@MTX5148635"
+
+
 def solve(n, time_map):
     sumCost = pow(2, 31)
 
