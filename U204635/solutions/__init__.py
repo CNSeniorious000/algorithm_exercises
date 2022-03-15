@@ -56,6 +56,9 @@ if __name__ == '__main__':
     from wyh_solution import solve
     assert solve(*example_testcase) == 6
 
+    from lx_solution import solve
+    assert solve(*example_testcase) == 6
+
     from BF_solution import solve
     assert solve(*example_testcase) == 6
 
