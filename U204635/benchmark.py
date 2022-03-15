@@ -26,7 +26,6 @@ def run_1(func, *args, n=10_000):
 def run_2(func, *args, t=30):
     raise NotImplementedError(func, args, t)
 
-
 def do_test_1(size, ratio, m=100, n=100):
     cases = [
         generate_testcase(size, ratio)
@@ -38,7 +37,7 @@ def do_test_1(size, ratio, m=100, n=100):
         for func in (solve_0, solve_1, solve_2, solve_3)
     ]
 
-def do_test_2(size, ratio, m=20, n=5):
+def do_test_2(size, ratio, m=32, n=8):
     cases = [
         generate_testcase(size, ratio)
         for _ in range(m)
@@ -48,7 +47,6 @@ def do_test_2(size, ratio, m=20, n=5):
         sum(run_1(func, size, case, n=n) for case in cases) / (m * n)
         for func in (solve_0, solve_3)
     ]
-
 
 def plot_1():
     from matplotlib import pyplot as plt
@@ -95,11 +93,12 @@ def plot_2():
 
     # plt.plot(x[:limit], y_0[:limit], label="WYH")
     # plt.plot(x[:limit], y_3[:limit], label="ZYH-DP")
-    plt.plot(x[:limit], y[:limit], label=r"$\frac{WYH}{ZYH\_DP}$")
+    plt.plot(x[:limit], y[:limit])
     plt.title("time complexity among different algorithms")
     plt.xlabel("n")
-    plt.ylabel("time(s)")
-    plt.legend()
+    # plt.ylabel("time(s)")
+    plt.ylabel(r"$\frac{WYH}{ZYH\_DP}$")
+    # plt.legend()
     plt.show()
 
 
