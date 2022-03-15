@@ -2,10 +2,9 @@ from solutions.wyh_solution import solve as solve_0
 from solutions.lx_solution import solve as solve_1
 from solutions.BF_solution import solve as solve_2
 from solutions.DP_solution import solve as solve_3
-from time import perf_counter as time
+from contextlib import suppress, contextmanager
 from solutions import generate_testcase
-from contextlib import contextmanager
-from contextlib import suppress
+from time import perf_counter as time
 from rich import print
 
 
@@ -102,5 +101,18 @@ def plot_2():
     plt.show()
 
 
+def run_and_save_result():
+    from alive_progress import alive_it as track
+    import pickle
+    with suppress(KeyboardInterrupt):
+        x, y_0, y_1, y_2, y_3 = zip(
+            *((size, *do_test_1(size, 1, 20, 20)) for size in track(range(3, 10)))
+        )
+    limit = min(map(len, (x, y_0, y_1, y_2, y_3)))
+    pickle.dump((
+        (x[:limit], y_0[:limit], y_1[:limit], y_2[:limit], y_3[:limit])
+    ), open("out.pkl", "wb"))
+
+
 if __name__ == '__main__':
-    plot_2()
+    run_and_save_result()
