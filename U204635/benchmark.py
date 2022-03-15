@@ -15,7 +15,7 @@ def timer(func):
     print(func.__name__, time() - t)
 
 
-def run(func, *args, n=10_000):
+def run_1(func, *args, n=10_000):
     with timer(func):
         t = time()
         for _ in range(n):
@@ -23,27 +23,27 @@ def run(func, *args, n=10_000):
         return time() - t
 
 
-def do_test(size, ratio, m=100, n=100):
+def do_test_1(size, ratio, m=100, n=100):
     cases = [
         generate_testcase(size, ratio)
         for _ in range(m)
     ]
 
     return [
-        sum(run(func, size, case, n=n) for case in cases)/(m*n)
+        sum(run_1(func, size, case, n=n) for case in cases)/(m*n)
         for func in (solve_0, solve_1, solve_2)
     ]
 
 
-def plot():
+def plot_1():
     from matplotlib import pyplot as plt
     ratio = 0.9
     x, y_0, y_1, y_2 = [], [], [], []
     with suppress(KeyboardInterrupt):
-        for size in range(4, 12):
+        for size in range(9, 15):
             print(f"{size = }, {ratio = }")
             x.append(size)
-            a, b, c = do_test(size, ratio)
+            a, b, c = do_test_1(size, ratio)
             y_0.append(a)
             y_1.append(b)
             y_2.append(c)
@@ -57,4 +57,4 @@ def plot():
 
 
 if __name__ == '__main__':
-    plot()
+    plot_1()
