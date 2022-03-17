@@ -1,7 +1,10 @@
+import bisect
+
+
 def solve(lst, num):
-    try:
-        return lst.index(num)
-    except ValueError:
+    if num in lst:
+        return bisect.bisect_left(lst, num)
+    else:
         return -1
 
 
