@@ -1,7 +1,7 @@
 import bisect
 
 
-def solve(lst, num):
+def solve(lst: list, num: int) -> int:
     if num in lst:
         return bisect.bisect_left(lst, num)
     else:
@@ -9,9 +9,9 @@ def solve(lst, num):
 
 
 if __name__ == '__main__':
-    while True:
-        try:
+    from contextlib import suppress
+
+    with suppress(EOFError):
+        while True:
             s = input().split()
-        except EOFError:
-            break
-        print(solve(list(map(int, s[1:-1])), int(s[-1])))
+            print(solve(list(map(int, s[1:-1])), int(s[-1])))
