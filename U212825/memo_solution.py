@@ -1,4 +1,13 @@
-from functools import cache
+def cache(func):
+    memo = {}
+
+    def inner(i, j):
+        ans = memo.get((i, j), None)
+        if ans is None:
+            ans = memo[i, j] = func(i, j)
+        return ans
+
+    return inner
 
 
 @cache
