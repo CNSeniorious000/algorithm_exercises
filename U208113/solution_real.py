@@ -1,6 +1,6 @@
 def solve(lst: list, num: int) -> int:
-    lth = len(lst)
     if lst[0] < num < lst[-1]:
+        lth = len(lst)
         l, r = 0, lth - 1
         while l < r:
             index = (l + r) // 2

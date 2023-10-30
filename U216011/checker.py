@@ -20,4 +20,12 @@ ans = [1829, 2179, 648, 1592, 1345, 1266, 2274, 1444, 1262, 2210, 1503, 791, 253
        1898, 661, 1558, 1801, 1970, 1490, 1194, 662, 888, 1992, 1496, 808, 1551, 1910, 2900, 1843, 2809, 2363, 902]
 
 result = solve(n := inp[0], [inp[1 + n * i:1 + n * i + n] for i in range(n)], inp[-1])
-print(list(filter(lambda x: x[1], enumerate([ans[i] != result[i] for i in range(n - 1)]))), sep="\n")
+print(
+    list(
+        filter(
+            lambda x: x[1],
+            enumerate(ans[i] != result[i] for i in range(n - 1)),
+        )
+    ),
+    sep="\n",
+)

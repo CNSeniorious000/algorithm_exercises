@@ -16,12 +16,7 @@ def knightTravel(x, y):
 
     # 返回单个点的单个邻域元组
     def count(x, y, dx, dy):
-        if 0 <= x+dx <= 7 and 0 <= y+dy <= 7:
-            # print(x+dx,y+dy)
-            # print("\n")
-            return (x+dx, y+dy)
-        else:
-            return -1
+        return (x+dx, y+dy) if 0 <= x+dx <= 7 and 0 <= y+dy <= 7 else -1
 
     # 输入位置元组，返回单个点的可行落脚点元组数列,末尾添加了实际可行领域初始值，即理论可行邻域数
     def direction(loc):
@@ -77,33 +72,31 @@ def knightTravel(x, y):
         nonlocal dic
         nonlocal path
         nonlocal travelList
-        # print("nowTurple",nowTurple)
-        # print(step:=step+1,end="\t")
-        if(len(path) == 64):
+        if (len(path) == 64):
             return path[:]
-        else:
-            Neighbors = dic[nowTurple]
-            # print("Neighbors",Neighbors)
-            sorted_Neighbors = sortNeighbors(Neighbors)  # 对邻域进行升序排序
-            # print("sorted_Neighbors",sorted_Neighbors)
-            # print("path.len", len(path),"\t","path",path)
-            for i in range(len(sorted_Neighbors)):
-                # result=0
-                next = (sorted_Neighbors[i][0], sorted_Neighbors[i][1])
-                # print("next",next)
-                if next not in path:
-                    walkInOrOut(next, 1)
-                    path.append(next)
-                    # print("pa.apend",path)
-                    # print("append Success")
-                    result = perm(next)
-                    if result:
-                        if result not in travelList:
-                            travelList.append(result)
-                        return 0
-                    # print("46465464654")
-                    walkInOrOut(next, -1)
-                    path.pop()
+        Neighbors = dic[nowTurple]
+        # print("Neighbors",Neighbors)
+        sorted_Neighbors = sortNeighbors(Neighbors)  # 对邻域进行升序排序
+        # print("sorted_Neighbors",sorted_Neighbors)
+        # print("path.len", len(path),"\t","path",path)
+        for i in range(len(sorted_Neighbors)):
+            # result=0
+            next = (sorted_Neighbors[i][0], sorted_Neighbors[i][1])
+            # print("next",next)
+            if next not in path:
+                walkInOrOut(next, 1)
+                path.append(next)
+                # print("pa.apend",path)
+                # print("append Success")
+                result = perm(next)
+                if result:
+                    if result not in travelList:
+                        travelList.append(result)
+                    return 0
+                # print("46465464654")
+                walkInOrOut(next, -1)
+                path.pop()
+
     dic = dictionary()
     travelList = []
     path = [(x, y)]
