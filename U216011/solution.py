@@ -2,7 +2,9 @@ def solve(n, matrix, v):
     ans = matrix[v].copy()
     to_scan = set(range(n)) - {v}
     for _ in range(n - 1):
-        to_scan.remove(index := min([i for i in to_scan if ~ans[i]], key=lambda x: ans[x]))
+        to_scan.remove(
+            index := min((i for i in to_scan if ~ans[i]), key=lambda x: ans[x])
+        )
         total = ans[index]
         row = matrix[index]
         for i in to_scan:

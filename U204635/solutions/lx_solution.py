@@ -25,7 +25,7 @@ def solve(n, time_map):
                 perm(numList, start + 1, end)
                 numList[start], numList[i] = numList[i], numList[start]
 
-    nums = [i for i in range(n)]
+    nums = list(range(n))
     perm(nums, 1, n)
 
     return sumCost

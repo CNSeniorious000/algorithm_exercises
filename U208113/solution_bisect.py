@@ -2,10 +2,7 @@ import bisect
 
 
 def solve(lst: list, num: int) -> int:
-    if num in lst:
-        return bisect.bisect_left(lst, num)
-    else:
-        return -1
+    return bisect.bisect_left(lst, num) if num in lst else -1
 
 
 if __name__ == '__main__':

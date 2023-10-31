@@ -18,16 +18,13 @@ def travel(visited, x, y):
         return [(x, y)]
 
     for _, xx, yy in find_bests(visited, x, y):
-        result = travel(visited | {(xx, yy)}, xx, yy)
-        if result:
+        if result := travel(visited | {(xx, yy)}, xx, yy):
             return [(x, y)] + result
 
 if __name__ == '__main__':
     x, y = map(int, input().split())
     world = [[0] * size for _ in range(size)]
-    step = 0
-    for i, j in travel({(x, y)}, x, y):
-        step += 1
+    for step, (i, j) in enumerate(travel({(x, y)}, x, y), start=1):
         world[i][j] = step
 
     print(*(' '.join(map(str, row)) for row in world), sep='\n')
